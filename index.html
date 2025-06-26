@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beautiful Interactive Crystal Guide</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -64,26 +66,33 @@
 </head>
 <body class="antialiased">
 
+    <!-- Main Container -->
     <div id="app" class="container mx-auto px-4 py-8 md:py-12">
 
+        <!-- Header -->
         <header class="text-center mb-12">
             <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800">Crystal Guide</h1>
             <p class="text-lg text-gray-500 mt-2">Discover their meanings and vibrant energies</p>
 
+            <!-- Redesigned Navigation Menu -->
             <div class="mt-8 inline-block">
                 <nav class="bg-white/60 backdrop-blur-sm rounded-full shadow-lg p-2">
                     <ul id="main-menu" class="flex items-center flex-wrap justify-center gap-x-2">
-                        </ul>
+                        <!-- Dynamic menu items will be injected here -->
+                    </ul>
                 </nav>
             </div>
 
         </header>
 
+        <!-- Crystal Grid -->
         <main id="crystal-grid" class="space-y-4">
-            </main>
+            <!-- Collapsible crystal sections will be injected here by JavaScript -->
+        </main>
 
     </div>
 
+    <!-- Detail Modal -->
     <div id="crystal-detail-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
         <div id="modal-backdrop" class="absolute inset-0 bg-black bg-opacity-50 opacity-0"></div>
         <div id="modal-content" class="relative z-10 w-full max-w-2xl max-h-[90vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col transform scale-95">
@@ -108,41 +117,41 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- DATA ---
-            // Updated data with high-quality, free-to-use image URLs.
+            // Updated data with high-quality, free-to-use image URLs from Pexels for better stability.
             const crystalData = {
                 "The Quartz Family": [
-                    { name: "Clear Quartz", meaning: "Known as the 'master healer,' it amplifies energy, thought, and the effects of other crystals. It absorbs, stores, releases, and regulates energy, promoting clarity and focus.", imageUrl: "https://images.unsplash.com/photo-1582234394850-8b3d3420ab2a?q=80&w=800", colorHex: "#eaf2f8" },
-                    { name: "Amethyst", meaning: "A protective stone that relieves stress, balances mood swings, and dispels negativity. It enhances spiritual awareness and intuition.", imageUrl: "https://images.unsplash.com/photo-1598586958432-843f88df964e?q=80&w=800", colorHex: "#9b59b6" },
-                    { name: "Rose Quartz", meaning: "The stone of universal love. It fosters unconditional love, trust, and harmony in relationships, while promoting self-love and deep inner healing.", imageUrl: "https://images.unsplash.com/photo-1620954938342-a725b82a72b3?q=80&w=800", colorHex: "#f7cac9" },
-                    { name: "Citrine", meaning: "Attracts wealth, prosperity, and success. It imparts joy, wonder, and enthusiasm, raising self-esteem and stimulating creativity.", imageUrl: "https://images.unsplash.com/photo-1610444346768-54605b018597?q=80&w=800", colorHex: "#f1c40f" },
-                    { name: "Smoky Quartz", meaning: "A grounding and protective stone that neutralizes negative vibrations. It aids in detoxification, disperses fear, and lifts depression.", imageUrl: "https://images.unsplash.com/photo-1619890060963-e380517eaa3e?q=80&w=800", colorHex: "#5d4954" },
-                    { name: "Aventurine", meaning: "A stone of prosperity and luck. It reinforces leadership qualities and decisiveness while promoting compassion and perseverance.", imageUrl: "https://images.unsplash.com/photo-1616423650244-88483b8a1347?q=80&w=800", colorHex: "#27ae60" },
+                    { name: "Clear Quartz", meaning: "Known as the 'master healer,' it amplifies energy, thought, and the effects of other crystals. It absorbs, stores, releases, and regulates energy, promoting clarity and focus.", imageUrl: "https://images.pexels.com/photos/8132961/pexels-photo-8132961.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#eaf2f8" },
+                    { name: "Amethyst", meaning: "A protective stone that relieves stress, balances mood swings, and dispels negativity. It enhances spiritual awareness and intuition.", imageUrl: "https://images.pexels.com/photos/3214803/pexels-photo-3214803.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#9b59b6" },
+                    { name: "Rose Quartz", meaning: "The stone of universal love. It fosters unconditional love, trust, and harmony in relationships, while promoting self-love and deep inner healing.", imageUrl: "https://images.pexels.com/photos/4040588/pexels-photo-4040588.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#f7cac9" },
+                    { name: "Citrine", meaning: "Attracts wealth, prosperity, and success. It imparts joy, wonder, and enthusiasm, raising self-esteem and stimulating creativity.", imageUrl: "https://images.pexels.com/photos/14846777/pexels-photo-14846777.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#f1c40f" },
+                    { name: "Smoky Quartz", meaning: "A grounding and protective stone that neutralizes negative vibrations. It aids in detoxification, disperses fear, and lifts depression.", imageUrl: "https://images.pexels.com/photos/15993309/pexels-photo-15993309/free-photo-of-close-up-of-a-smoky-quartz.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#5d4954" },
+                    { name: "Aventurine", meaning: "A stone of prosperity and luck. It reinforces leadership qualities and decisiveness while promoting compassion and perseverance.", imageUrl: "https://images.pexels.com/photos/10019910/pexels-photo-10019910.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#27ae60" },
                 ],
                 "Chalcedony Varieties": [
-                    { name: "Agate", meaning: "A grounding stone that brings emotional, physical, and intellectual balance. It centers and stabilizes physical energy.", imageUrl: "https://images.unsplash.com/photo-1550426831-b96b360b7318?q=80&w=800", colorHex: "#839192" },
-                    { name: "Carnelian", meaning: "A stabilizing stone that restores vitality and motivation. It stimulates creativity, courage, and positive life choices.", imageUrl: "https://images.unsplash.com/photo-1621020227183-5499f5791783?q=80&w=800", colorHex: "#e74c3c" },
-                    { name: "Onyx", meaning: "A stone of strength, giving support in difficult circumstances. It centers energy, promotes vigor, and aids in wise decision-making.", imageUrl: "https://images.unsplash.com/photo-1531120287437-47c3e34b8c17?q=80&w=800", colorHex: "#34495e" },
-                    { name: "Jasper", meaning: "Known as the 'supreme nurturer,' it sustains and supports through times of stress. It brings tranquility and wholeness.", imageUrl: "https://images.unsplash.com/photo-1619623835639-9d95f9c961e0?q=80&w=800", colorHex: "#c0392b" },
-                    { name: "Bloodstone", meaning: "An excellent blood cleanser and a powerful healing stone. It heightens intuition and increases creativity while being grounding and protective.", imageUrl: "https://images.unsplash.com/photo-1631620822167-4a4b6bef7f63?q=80&w=800", colorHex: "#2c3e50" },
-                    { name: "Chrysoprase", meaning: "Promotes joy, optimism, and love. It helps mend broken hearts and reduces anxiety, fostering forgiveness and compassion.", imageUrl: "https://images.unsplash.com/photo-1616423650123-5e9f82d1c699?q=80&w=800", colorHex: "#a3e4d7" },
+                    { name: "Agate", meaning: "A grounding stone that brings emotional, physical, and intellectual balance. It centers and stabilizes physical energy.", imageUrl: "https://images.pexels.com/photos/8031899/pexels-photo-8031899.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#839192" },
+                    { name: "Carnelian", meaning: "A stabilizing stone that restores vitality and motivation. It stimulates creativity, courage, and positive life choices.", imageUrl: "https://images.pexels.com/photos/17651372/pexels-photo-17651372/free-photo-of-close-up-of-a-carnelian-stone.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#e74c3c" },
+                    { name: "Onyx", meaning: "A stone of strength, giving support in difficult circumstances. It centers energy, promotes vigor, and aids in wise decision-making.", imageUrl: "https://images.pexels.com/photos/1579240/pexels-photo-1579240.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#34495e" },
+                    { name: "Jasper", meaning: "Known as the 'supreme nurturer,' it sustains and supports through times of stress. It brings tranquility and wholeness.", imageUrl: "https://images.pexels.com/photos/8213601/pexels-photo-8213601.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#c0392b" },
+                    { name: "Bloodstone", meaning: "An excellent blood cleanser and a powerful healing stone. It heightens intuition and increases creativity while being grounding and protective.", imageUrl: "https://images.pexels.com/photos/20348705/pexels-photo-20348705/free-photo-of-close-up-of-a-bloodstone.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#2c3e50" },
+                    { name: "Chrysoprase", meaning: "Promotes joy, optimism, and love. It helps mend broken hearts and reduces anxiety, fostering forgiveness and compassion.", imageUrl: "https://images.pexels.com/photos/20348707/pexels-photo-20348707/free-photo-of-a-close-up-of-a-green-stone.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#a3e4d7" },
                 ],
                 "The Feldspar Group": [
-                    { name: "Moonstone", meaning: "A stone of new beginning, inner growth, and strength. It soothes emotional instability and stress, providing calmness.", imageUrl: "https://images.unsplash.com/photo-1618641986557-95d63870876a?q=80&w=800", colorHex: "#aed6f1" },
-                    { name: "Labradorite", meaning: "A stone of transformation and a useful companion through change. It balances and protects the aura, raises consciousness, and grounds spiritual energies.", imageUrl: "https://images.unsplash.com/photo-1591334994033-64901579248e?q=80&w=800", colorHex: "#566573" },
-                    { name: "Sunstone", meaning: "A stone of leadership, bringing personal power, freedom, and expanded consciousness. It instills good nature and heightens intuition.", imageUrl: "https://images.unsplash.com/photo-1616423650058-2e0e0d6e6d1c?q=80&w=800", colorHex: "#f39c12" },
-                    { name: "Amazonite", meaning: "Known as the 'stone of courage,' it soothes emotional trauma, alleviating worry and fear. It dispels negative energy and aggravation.", imageUrl: "https://images.unsplash.com/photo-1617031333792-3c139b8de42a?q=80&w=800", colorHex: "#1abc9c" },
+                    { name: "Moonstone", meaning: "A stone of new beginning, inner growth, and strength. It soothes emotional instability and stress, providing calmness.", imageUrl: "https://images.pexels.com/photos/9979963/pexels-photo-9979963.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#aed6f1" },
+                    { name: "Labradorite", meaning: "A stone of transformation and a useful companion through change. It balances and protects the aura, raises consciousness, and grounds spiritual energies.", imageUrl: "https://images.pexels.com/photos/7194915/pexels-photo-7194915.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#566573" },
+                    { name: "Sunstone", meaning: "A stone of leadership, bringing personal power, freedom, and expanded consciousness. It instills good nature and heightens intuition.", imageUrl: "https://images.pexels.com/photos/20348709/pexels-photo-20348709/free-photo-of-close-up-of-a-sunstone.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#f39c12" },
+                    { name: "Amazonite", meaning: "Known as the 'stone of courage,' it soothes emotional trauma, alleviating worry and fear. It dispels negative energy and aggravation.", imageUrl: "https://images.pexels.com/photos/1749823/pexels-photo-1749823.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#1abc9c" },
                 ],
-                 "Oxides & Hydroxides": [
-                    { name: "Hematite", meaning: "A very protective stone that helps to absorb negative energy and calms in times of stress or worry. It is a great detoxifying stone.", imageUrl: "https://images.unsplash.com/photo-1616225330325-502a3a5f7e7c?q=80&w=800", colorHex: "#707b7c" },
-                    { name: "Ruby", meaning: "Energizes and balances the heart. It encourages a passion for life but never in a self-destructive way. It improves motivation and setting of realistic goals.", imageUrl: "https://images.unsplash.com/photo-1589993358043-41d3e58985a9?q=80&w=800", colorHex: "#e74c3c" },
-                    { name: "Sapphire", meaning: "Known as the 'wisdom stone,' each color of Sapphire brings its own particular wisdom. It focuses and calms the mind, releasing unwanted thoughts and mental tension.", imageUrl: "https://images.unsplash.com/photo-1608290234316-e42b2e1f2f2f?q=80&w=800", colorHex: "#3498db" },
+                "Oxides & Hydroxides": [
+                    { name: "Hematite", meaning: "A very protective stone that helps to absorb negative energy and calms in times of stress or worry. It is a great detoxifying stone.", imageUrl: "https://images.pexels.com/photos/1294437/pexels-photo-1294437.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#707b7c" },
+                    { name: "Ruby", meaning: "Energizes and balances the heart. It encourages a passion for life but never in a self-destructive way. It improves motivation and setting of realistic goals.", imageUrl: "https://images.pexels.com/photos/1395967/pexels-photo-1395967.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#e74c3c" },
+                    { name: "Sapphire", meaning: "Known as the 'wisdom stone,' each color of Sapphire brings its own particular wisdom. It focuses and calms the mind, releasing unwanted thoughts and mental tension.", imageUrl: "https://images.pexels.com/photos/1544420/pexels-photo-1544420.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#3498db" },
                 ],
                 "Carbonates & Others": [
-                     { name: "Malachite", meaning: "A powerful stone of transformation that encourages risk-taking and change. It breaks unwanted ties and outworn patterns.", imageUrl: "https://images.unsplash.com/photo-1616423650220-aa8a2f455348?q=80&w=800", colorHex: "#16a085" },
-                     { name: "Selenite", meaning: "Provides for clarity of the mind, opening the crown and higher crown chakras. It is a calming stone that instills deep peace.", imageUrl: "https://images.unsplash.com/photo-1621020227183-5499f5791783?q=80&w=800", colorHex: "#fdfefe" },
-                     { name: "Lapis Lazuli", meaning: "A stone of wisdom, intuition, and truth. It stimulates the desire for knowledge and understanding, and aids the process of learning.", imageUrl: "https://images.unsplash.com/photo-1592394544079-c5534d5500c6?q=80&w=800", colorHex: "#2980b9" },
-                     { name: "Turquoise", meaning: "A purification stone. It dispels negative energy and can be worn to protect against outside influences or pollutants in the atmosphere.", imageUrl: "https://images.unsplash.com/photo-1620360344360-a92237836592?q=80&w=800", colorHex: "#1abc9c" },
-                     { name: "Garnet", meaning: "A powerfully energizing and regenerating stone. It revitalizes, purifies, and balances energy, bringing serenity or passion as appropriate.", imageUrl: "https://images.unsplash.com/photo-1618635842144-8c6f4b63e031?q=80&w=800", colorHex: "#c0392b" },
+                    { name: "Malachite", meaning: "A powerful stone of transformation that encourages risk-taking and change. It breaks unwanted ties and outworn patterns.", imageUrl: "https://images.pexels.com/photos/1011329/pexels-photo-1011329.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#16a085" },
+                    { name: "Selenite", meaning: "Provides for clarity of the mind, opening the crown and higher crown chakras. It is a calming stone that instills deep peace.", imageUrl: "https://images.pexels.com/photos/4040600/pexels-photo-4040600.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#fdfefe" },
+                    { name: "Lapis Lazuli", meaning: "A stone of wisdom, intuition, and truth. It stimulates the desire for knowledge and understanding, and aids the process of learning.", imageUrl: "https://images.pexels.com/photos/12431633/pexels-photo-12431633.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#2980b9" },
+                    { name: "Turquoise", meaning: "A purification stone. It dispels negative energy and can be worn to protect against outside influences or pollutants in the atmosphere.", imageUrl: "https://images.pexels.com/photos/5442466/pexels-photo-5442466.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#1abc9c" },
+                    { name: "Garnet", meaning: "A powerfully energizing and regenerating stone. It revitalizes, purifies, and balances energy, bringing serenity or passion as appropriate.", imageUrl: "https://images.pexels.com/photos/20348710/pexels-photo-20348710/free-photo-of-close-up-of-a-garnet-stone.jpeg?auto=compress&cs=tinysrgb&w=800", colorHex: "#c0392b" },
                 ]
             };
 
@@ -207,7 +216,7 @@
                         card.className = 'group cursor-pointer transform hover:-translate-y-1.5 transition-transform duration-300';
                         card.innerHTML = `
                             <div class="bg-white rounded-2xl shadow-lg overflow-hidden h-full flex flex-col">
-                                <img src="${crystal.imageUrl}" alt="${crystal.name}" class="w-full h-40 md:h-48 object-cover group-hover:opacity-90 transition-opacity" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/400x400/cccccc/333333?text=Error';">
+                                <img src="${crystal.imageUrl}" alt="${crystal.name}" class="w-full h-40 md:h-48 object-cover group-hover:opacity-90 transition-opacity" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/400x400/cccccc/333333?text=Image+Error';">
                                 <div class="p-4 flex-grow">
                                     <h3 class="text-lg font-bold text-gray-800">${crystal.name}</h3>
                                 </div>
@@ -269,3 +278,5 @@
 
 </body>
 </html>
+```
+I've updated the `imageUrl` links within the `crystalData` object in the script. The rest of the page structure and functionality remains the same. The images should now load correctly for y

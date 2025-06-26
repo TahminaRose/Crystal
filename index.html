@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beautiful Interactive Crystal Guide</title>
+    <title>Comprehensive Interactive Crystal Guide</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
     <style>
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
         body {
             font-family: 'Patrick Hand', cursive;
             background-image: url('https://images.pexels.com/photos/1072824/pexels-photo-1072824.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
@@ -20,66 +18,32 @@
             color: #333;
             font-size: 1.1rem;
         }
-        h1, h2, h3, h4, h5, h6 {
-             letter-spacing: 0.5px;
-        }
-        #app-container {
-            background-color: rgba(245, 240, 233, 0.88);
-            backdrop-filter: blur(5px);
+        h1, h2, h3, h4, h5, h6 { letter-spacing: 0.5px; }
+        .app-container {
+            background-color: rgba(245, 240, 233, 0.92);
+            backdrop-filter: blur(8px);
             border-radius: 1.5rem;
             padding: 2rem;
             margin: 2rem auto;
             max-width: 1200px;
+            min-height: 80vh;
         }
-        #modal-backdrop {
-            transition: opacity 0.3s ease-in-out;
-        }
-        #modal-content {
-            transition: transform 0.3s ease-in-out;
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.4);
-            border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.6);
-        }
-        .accordion-content {
-            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out, padding 0.5s ease-in-out;
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-        }
-        .accordion-open .accordion-content {
-            max-height: 2000px;
-            opacity: 1;
-            padding-top: 1.5rem;
-        }
-        .accordion-open .chevron-icon {
-            transform: rotate(180deg);
-        }
-        .chevron-icon {
-            transition: transform 0.3s ease-in-out;
-        }
-        .thumbnail.active-thumbnail {
-            border-color: #f39c12; /* a bright color to show selection */
-            transform: scale(1.05);
-        }
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.4); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.6); }
+        .accordion-content { transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out, padding 0.5s ease-in-out; max-height: 0; opacity: 0; overflow: hidden; }
+        .accordion-open .accordion-content { max-height: 5000px; opacity: 1; padding-top: 1.5rem; }
+        .accordion-open .chevron-icon { transform: rotate(180deg); }
+        .chevron-icon { transition: transform 0.3s ease-in-out; }
+        .thumbnail.active-thumbnail { border-color: #f39c12; transform: scale(1.05); }
     </style>
 </head>
 <body class="antialiased">
 
-    <div id="app-container">
-        <div id="app" class="container mx-auto">
-
+    <div id="app-container" class="app-container">
+        <!-- Main Page View -->
+        <div id="main-page">
             <header class="text-center mb-12">
                 <h1 class="text-5xl md:text-6xl text-gray-800">Crystal Guide</h1>
                 <p class="text-xl text-gray-600 mt-2">Discover their meanings and vibrant energies</p>
@@ -87,83 +51,306 @@
                     <input type="text" id="search-box" placeholder="Search for a crystal..." class="w-full max-w-lg p-3 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-500">
                 </div>
             </header>
-
-            <main id="crystal-grid" class="space-y-6">
-                <!-- Crystal data will be rendered here -->
-            </main>
-
+            <main id="crystal-grid" class="space-y-6"></main>
         </div>
-    </div>
 
-    <div id="crystal-detail-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
-        <div id="modal-backdrop" class="absolute inset-0 bg-black bg-opacity-50 opacity-0"></div>
-        <div id="modal-content" class="relative z-10 w-full max-w-4xl max-h-[90vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col transform scale-95">
-            <div id="modal-gradient-bg" class="absolute inset-0"></div>
-            <button id="close-modal-btn" class="absolute top-4 right-4 z-20 text-white bg-black bg-opacity-20 rounded-full p-2 hover:bg-opacity-40 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-            <div class="relative p-6 md:p-8 overflow-y-auto custom-scrollbar">
-                <div class="flex flex-col md:flex-row gap-8">
+        <!-- Detail Page View (hidden by default) -->
+        <div id="crystal-detail-page" class="hidden">
+            <header class="flex justify-between items-center mb-8">
+                 <button id="back-to-guide-btn" class="text-gray-700 hover:text-black transition-colors text-xl flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                    Back to Guide
+                </button>
+                <h1 id="detail-name-header" class="text-4xl md:text-5xl text-gray-800 text-center"></h1>
+                <div class="w-24"></div> <!-- Spacer -->
+            </header>
+            <main>
+                <div class="flex flex-col lg:flex-row gap-8">
                     <!-- Image Gallery Section -->
-                    <div class="w-full md:w-1/2 flex flex-col gap-4">
+                    <div class="w-full lg:w-1/2 flex flex-col gap-4">
                         <div id="main-image-container" class="relative">
-                            <img id="modal-img" src="" alt="Crystal" class="w-full h-auto object-cover rounded-2xl shadow-lg border-4 border-white/20">
+                            <img id="detail-img" src="" alt="Crystal" class="w-full h-auto object-cover rounded-2xl shadow-lg border-4 border-white">
                         </div>
-                        <div id="thumbnail-gallery" class="flex gap-2 overflow-x-auto custom-scrollbar pb-2">
-                            <!-- Thumbnails will be injected here -->
-                        </div>
+                        <div id="thumbnail-gallery" class="flex gap-2 overflow-x-auto custom-scrollbar pb-2"></div>
                     </div>
                     <!-- Details Section -->
-                    <div class="text-white w-full md:w-1/2">
-                        <h2 id="modal-name" class="text-5xl mb-4" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.4);"></h2>
-                        <h3 class="text-2xl mb-2 opacity-90">Meaning</h3>
-                        <p id="modal-meaning" class="text-lg leading-relaxed opacity-90 mb-4"></p>
-                        <h3 class="text-2xl mb-2 opacity-90">Chakra</h3>
-                        <p id="modal-chakra" class="text-lg leading-relaxed opacity-90 mb-4"></p>
-                        <h3 class="text-2xl mb-2 opacity-90">Zodiac</h3>
-                        <p id="modal-zodiac" class="text-lg leading-relaxed opacity-90"></p>
+                    <div class="w-full lg:w-1/2">
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="text-3xl mb-2 text-gray-700">Meaning & Symbolism</h3>
+                                <p id="detail-meaning" class="text-lg leading-relaxed text-gray-600"></p>
+                            </div>
+                             <div>
+                                <h3 class="text-3xl mb-2 text-gray-700">History</h3>
+                                <p id="detail-history" class="text-lg leading-relaxed text-gray-600"></p>
+                            </div>
+                            <div>
+                                <h3 class="text-3xl mb-2 text-gray-700">Emotional Healing</h3>
+                                <ul id="detail-emotions" class="list-disc list-inside text-lg text-gray-600 space-y-1"></ul>
+                            </div>
+                            <!-- Data Table -->
+                            <div class="bg-white/50 rounded-xl p-4 shadow-md">
+                                <div class="grid grid-cols-2 gap-4 text-lg">
+                                    <div class="font-bold text-gray-700">Chakra:</div><p id="detail-chakra" class="text-gray-600"></p>
+                                    <div class="font-bold text-gray-700">Zodiac:</div><p id="detail-zodiac" class="text-gray-600"></p>
+                                    <div class="font-bold text-gray-700">Element:</div><p id="detail-element" class="text-gray-600"></p>
+                                    <div class="font-bold text-gray-700">Sacred Number:</div><p id="detail-number" class="text-gray-600"></p>
+                                    <div class="font-bold text-gray-700">Origins:</div><p id="detail-countries" class="text-gray-600"></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </main>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // NOTE: Due to the vast amount of data, this object is extensive.
             const crystalData = {
-                "The Quartz Family": [
-                    { name: "Clear Quartz", meaning: "Known as the 'master healer,' it amplifies energy, thought, and the effects of other crystals. It absorbs, stores, releases, and regulates energy, promoting clarity and focus.", imageUrls: ["https://images.pexels.com/photos/8132961/pexels-photo-8132961.jpeg?auto=compress&cs=tinysrgb&w=800", "https://images.pexels.com/photos/4040567/pexels-photo-4040567.jpeg?auto=compress&cs=tinysrgb&w=800", "https://images.pexels.com/photos/4040585/pexels-photo-4040585.jpeg?auto=compress&cs=tinysrgb&w=800"], colorHex: "#eaf2f8", chakra: "All", zodiac: "All" },
-                    { name: "Amethyst", meaning: "A protective stone that relieves stress, balances mood swings, and dispels negativity. It enhances spiritual awareness and intuition.", imageUrls: ["https://images.pexels.com/photos/3214803/pexels-photo-3214803.jpeg?auto=compress&cs=tinysrgb&w=800", "https://images.pexels.com/photos/4040590/pexels-photo-4040590.jpeg?auto=compress&cs=tinysrgb&w=800", "https://images.pexels.com/photos/3214800/pexels-photo-3214800.jpeg?auto=compress&cs=tinysrgb&w=800"], colorHex: "#9b59b6", chakra: "Third Eye, Crown", zodiac: "Aquarius, Pisces" },
+                "Agates": [
+                    { 
+                        name: "Agate", 
+                        meaning: "A grounding stone that brings emotional, physical, and intellectual balance. It centers and stabilizes physical energy, harmonizing yin and yang.",
+                        imageUrls: ["https://images.pexels.com/photos/8031899/pexels-photo-8031899.jpeg?auto=compress&cs=tinysrgb&w=800", "https://images.pexels.com/photos/7983656/pexels-photo-7983656.jpeg?auto=compress&cs=tinysrgb&w=800"], 
+                        chakra: "Root", zodiac: "Gemini, Virgo",
+                        history: "Used by ancient civilizations on the Mediterranean for millennia, Agate was prized for amulets and ornamentation. It was believed to quench thirst and protect from fever.",
+                        countries: ["USA", "Mexico", "Morocco", "Brazil", "Germany"],
+                        emotions: ["Soothing", "Calming", "Self-acceptance", "Concentration", "Overcoming negativity"],
+                        element: "Earth",
+                        sacredNumber: 7
+                    },
+                    { 
+                        name: "Blue Lace Agate", 
+                        meaning: "A wonderful healing stone with a soft, cooling and calming energy. It brings peace of mind and is particularly effective for activating and healing the Throat Chakra, allowing free expression of thoughts and feelings.",
+                        imageUrls: ["https://images.pexels.com/photos/8213589/pexels-photo-8213589.jpeg?auto=compress&cs=tinysrgb&w=800"], 
+                        chakra: "Throat", zodiac: "Pisces, Gemini",
+                        history: "Discovered in Namibia in the 1960s, this variety of agate is a relatively recent find. Its gentle, lace-like bands have made it a favorite for promoting tranquility.",
+                        countries: ["Namibia", "South Africa", "Romania", "USA"],
+                        emotions: ["Peace of mind", "Verbal expression", "Neutralizing anger", "Calmness", "Patience"],
+                        element: "Water",
+                        sacredNumber: 5
+                    },
+                     { 
+                        name: "Moss Agate", 
+                        meaning: "A stone of new beginnings, refreshing the soul and enabling you to see beauty in all you behold. It's a stone of wealth, attracting abundance in all forms.",
+                        imageUrls: ["https://images.pexels.com/photos/17651336/pexels-photo-17651336/free-photo-of-close-up-of-a-moss-agate-stone.jpeg?auto=compress&cs=tinysrgb&w=800"], 
+                        chakra: "Heart", zodiac: "Virgo",
+                        history: "Known as the gardener's stone, it was used to ensure a plentiful harvest. European farmers used it as a talisman for good luck and to connect with nature spirits.",
+                        countries: ["India", "Brazil", "USA", "Uruguay", "Central Europe"],
+                        emotions: ["Stability", "Connection to nature", "Abundance", "Self-esteem", "Emotional balance"],
+                        element: "Earth",
+                        sacredNumber: 1
+                    },
                 ],
-                "Chalcedony Varieties": [
-                    { name: "Agate", meaning: "A grounding stone that brings emotional, physical, and intellectual balance. It centers and stabilizes physical energy.", imageUrls: ["https://images.pexels.com/photos/8031899/pexels-photo-8031899.jpeg?auto=compress&cs=tinysrgb&w=800", "https://images.pexels.com/photos/7983656/pexels-photo-7983656.jpeg?auto=compress&cs=tinysrgb&w=800"], colorHex: "#839192", chakra: "Root", zodiac: "Gemini, Virgo" },
-                    { name: "Carnelian", meaning: "A stabilizing stone that restores vitality and motivation. It stimulates creativity, courage, and positive life choices.", imageUrls: ["https://images.pexels.com/photos/17651372/pexels-photo-17651372/free-photo-of-close-up-of-a-carnelian-stone.jpeg?auto=compress&cs=tinysrgb&w=800", "https://images.pexels.com/photos/12932609/pexels-photo-12932609.jpeg?auto=compress&cs=tinysrgb&w=800"], colorHex: "#e74c3c", chakra: "Sacral", zodiac: "Taurus, Cancer, Leo" },
+                "Quartz Varieties": [
+                    { 
+                        name: "Clear Quartz", 
+                        meaning: "Known as the 'master healer,' it amplifies energy, thought, and the effects of other crystals. It absorbs, stores, releases, and regulates energy, promoting clarity and focus.", 
+                        imageUrls: ["https://images.pexels.com/photos/8132961/pexels-photo-8132961.jpeg?auto=compress&cs=tinysrgb&w=800", "https://images.pexels.com/photos/4040567/pexels-photo-4040567.jpeg?auto=compress&cs=tinysrgb&w=800"], 
+                        chakra: "All", zodiac: "All",
+                        history: "Called 'krystallos' by the Ancient Greeks, meaning 'ice', they believed it was water frozen so deeply it would remain solid. Used in almost every culture for spiritual and healing purposes.",
+                        countries: ["Worldwide", "especially Brazil", "USA", "Himalayas", "Alps"],
+                        emotions: ["Clarity", "Focus", "Amplification of intentions", "Memory enhancement", "Spiritual growth"],
+                        element: "Air",
+                        sacredNumber: 4
+                    },
+                    { 
+                        name: "Amethyst", 
+                        meaning: "A protective stone that relieves stress, balances mood swings, and dispels negativity. It enhances spiritual awareness and intuition.", 
+                        imageUrls: ["https://images.pexels.com/photos/3214803/pexels-photo-3214803.jpeg?auto=compress&cs=tinysrgb&w=800", "https://images.pexels.com/photos/4040590/pexels-photo-4040590.jpeg?auto=compress&cs=tinysrgb&w=800"], 
+                        chakra: "Third Eye, Crown", zodiac: "Aquarius, Pisces",
+                        history: "The ancient Greeks believed Amethyst protected its owner from drunkenness and wore it to prevent intoxication. The name translates to 'not intoxicated'. It has long been associated with royalty and spiritual purity.",
+                        countries: ["Brazil", "Uruguay", "Siberia", "Zambia", "South Korea"],
+                        emotions: ["Stress relief", "Calmness", "Intuition", "Sobriety", "Protection"],
+                        element: "Air",
+                        sacredNumber: 3
+                    },
+                    { 
+                        name: "Rose Quartz", 
+                        meaning: "The stone of universal love. It restores trust and harmony in relationships, encouraging unconditional love. It purifies and opens the heart at all levels.",
+                        imageUrls: ["https://images.pexels.com/photos/4040588/pexels-photo-4040588.jpeg?auto=compress&cs=tinysrgb&w=800"], 
+                        chakra: "Heart", zodiac: "Taurus, Libra",
+                        history: "Rose quartz beads dating back to 7000 BC have been found in Mesopotamia. It has long been used in love rituals and as a symbol of beauty by civilizations like the Egyptians and Romans.",
+                        countries: ["South Africa", "Brazil", "India", "Madagascar", "USA"],
+                        emotions: ["Unconditional love", "Self-love", "Deep inner healing", "Peace", "Forgiveness"],
+                        element: "Water",
+                        sacredNumber: 7
+                    },
+                     { 
+                        name: "Citrine", 
+                        meaning: "A powerful cleanser and regenerator. Carrying the power of the sun, this is an exceedingly beneficial stone. It is warming, energizing, and highly creative.",
+                        imageUrls: ["https://images.pexels.com/photos/14846777/pexels-photo-14846777.jpeg?auto=compress&cs=tinysrgb&w=800"], 
+                        chakra: "Solar Plexus, Sacral", zodiac: "Aries, Gemini, Leo, Libra",
+                        history: "Known as the 'merchant's stone' for its ability to attract wealth and prosperity. It was used by the ancient Greeks and Romans for jewelry and intaglio work.",
+                        countries: ["Brazil", "Madagascar", "Russia", "USA", "Spain"],
+                        emotions: ["Joy", "Abundance", "Creativity", "Manifestation", "Self-confidence"],
+                        element: "Fire",
+                        sacredNumber: 6
+                    },
+                    { 
+                        name: "Smoky Quartz", 
+                        meaning: "One of the most efficient grounding and anchoring stones. This protective stone has a strong link with the earth and base chakras.",
+                        imageUrls: ["https://images.pexels.com/photos/15993309/pexels-photo-15993309/free-photo-of-close-up-of-a-smoky-quartz.jpeg?auto=compress&cs=tinysrgb&w=800"], 
+                        chakra: "Root, Solar Plexus", zodiac: "Scorpio, Sagittarius, Capricorn",
+                        history: "In ancient times, it was sacred to the Druids. The stone was a sacred stone of power to the ancient peoples of Britain, a belief that continued with the Celts. It was used in ceremonies to guide souls to the afterlife.",
+                        countries: ["Brazil", "USA (Colorado)", "Switzerland (Alps)", "Madagascar", "Australia"],
+                        emotions: ["Grounding", "Detoxification", "Stress relief", "Dispelling fear", "Letting go"],
+                        element: "Earth",
+                        sacredNumber: 2
+                    },
                 ],
-                "The Feldspar Group": [
-                    { name: "Moonstone", meaning: "A stone of new beginning, inner growth, and strength. It soothes emotional instability and stress, providing calmness.", imageUrls: ["https://images.pexels.com/photos/9979963/pexels-photo-9979963.jpeg?auto=compress&cs=tinysrgb&w=800", "https://images.pexels.com/photos/10375929/pexels-photo-10375929.jpeg?auto=compress&cs=tinysrgb&w=800"], colorHex: "#aed6f1", chakra: "Third Eye, Solar Plexus", zodiac: "Cancer, Libra, Scorpio" },
-                    { name: "Labradorite", meaning: "A stone of transformation and a useful companion through change. It balances and protects the aura, raises consciousness, and grounds spiritual energies.", imageUrls: ["https://images.pexels.com/photos/7194915/pexels-photo-7194915.jpeg?auto=compress&cs=tinysrgb&w=800", "https://images.pexels.com/photos/7194912/pexels-photo-7194912.jpeg?auto=compress&cs=tinysrgb&w=800"], colorHex: "#566573", chakra: "Throat, Third Eye, Crown", zodiac: "Leo, Scorpio, Sagittarius" },
+                "Feldspars & Friends": [
+                     { 
+                        name: "Labradorite", 
+                        meaning: "A stone of transformation, Labradorite is a useful companion through change, imparting strength and perseverance. It balances and protects the aura.",
+                        imageUrls: ["https://images.pexels.com/photos/7194915/pexels-photo-7194915.jpeg?auto=compress&cs=tinysrgb&w=800", "https://images.pexels.com/photos/7194912/pexels-photo-7194912.jpeg?auto=compress&cs=tinysrgb&w=800"], 
+                        chakra: "Throat, Third Eye, Crown", zodiac: "Leo, Scorpio, Sagittarius",
+                        history: "According to Inuit legend, the Northern Lights were once trapped in the rocks along the coast of Labrador. A wandering warrior freed them with his spear, but some of the light remained trapped in the stone.",
+                        countries: ["Canada (Labrador)", "Finland", "Madagascar", "Norway", "Russia"],
+                        emotions: ["Transformation", "Strength", "Perseverance", "Protection", "Intuition"],
+                        element: "Water",
+                        sacredNumber: 6
+                    },
+                    { 
+                        name: "Moonstone", 
+                        meaning: "A stone for 'new beginnings', Moonstone is a stone of inner growth and strength. It soothes emotional instability and stress, and stabilises the emotions.",
+                        imageUrls: ["https://images.pexels.com/photos/9979963/pexels-photo-9979963.jpeg?auto=compress&cs=tinysrgb&w=800", "https://images.pexels.com/photos/10375929/pexels-photo-10375929.jpeg?auto=compress&cs=tinysrgb&w=800"], 
+                        chakra: "Third Eye, Solar Plexus", zodiac: "Cancer, Libra, Scorpio",
+                        history: "In ancient Rome, it was believed Moonstone was born from solidified rays of the Moon. In India, it's considered a sacred stone and a traditional wedding gift, believed to bring good fortune.",
+                        countries: ["Sri Lanka", "India", "Australia", "USA", "Madagascar"],
+                        emotions: ["Inner growth", "Emotional stability", "Calmness", "Enhancing intuition", "Inspiration"],
+                        element: "Water",
+                        sacredNumber: 4
+                    },
+                     { 
+                        name: "Sunstone", 
+                        meaning: "A joyful, light-inspiring stone. It instills good nature, heightens intuition and allows the real self to shine through happily.",
+                        imageUrls: ["https://images.pexels.com/photos/20348709/pexels-photo-20348709/free-photo-of-close-up-of-a-sunstone.jpeg?auto=compress&cs=tinysrgb&w=800"], 
+                        chakra: "Sacral, Solar Plexus", zodiac: "Leo, Libra",
+                        history: "Used by ancient magicians to attract the strength of the sun. It was also used by the Vikings as a navigational tool, believed to help them locate the sun on overcast days.",
+                        countries: ["India", "Canada", "USA (Oregon)", "Norway", "Russia"],
+                        emotions: ["Joy", "Good nature", "Empowerment", "Vitality", "Alleviating fear"],
+                        element: "Fire",
+                        sacredNumber: 1
+                    },
+                    { 
+                        name: "Amazonite", 
+                        meaning: "Called the Stone of Courage and the Stone of Truth, Amazonite empowers one to search the self and discover one’s own truths and integrity.",
+                        imageUrls: ["https://images.pexels.com/photos/1749823/pexels-photo-1749823.jpeg?auto=compress&cs=tinysrgb&w=800"], 
+                        chakra: "Heart, Throat", zodiac: "Virgo",
+                        history: "Named after the Amazon River, though no deposits have been found there. It was used in ancient Egypt and is believed to have been one of the stones in the breastplate of the high priest.",
+                        countries: ["USA", "Russia", "Canada", "Brazil", "Madagascar"],
+                        emotions: ["Courage", "Truth", "Communication", "Soothing trauma", "Dispelling negativity"],
+                        element: "Water",
+                        sacredNumber: 5
+                    }
                 ],
-                "Other Notable Stones": [
-                    { name: "Black Tourmaline", meaning: "A premier stone of protection, it repels and blocks negative energies. It also aids in the removal of negative energies within a person or a space.", imageUrls: ["https://images.pexels.com/photos/1579240/pexels-photo-1579240.jpeg?auto=compress&cs=tinysrgb&w=800", "https://images.pexels.com/photos/1239859/pexels-photo-1239859.jpeg?auto=compress&cs=tinysrgb&w=800"], colorHex: "#2C3E50", chakra: "Root", zodiac: "Capricorn" },
-                    { name: "Jade", meaning: "A symbol of serenity and purity. It signifies wisdom gathered in tranquility and increases love and nurturing.", imageUrls: ["https://images.pexels.com/photos/1078879/pexels-photo-1078879.jpeg?auto=compress&cs=tinysrgb&w=800", "https://images.pexels.com/photos/2678456/pexels-photo-2678456.jpeg?auto=compress&cs=tinysrgb&w=800"], colorHex: "#16A085", chakra: "Heart", zodiac: "Aries, Taurus, Gemini, Libra" },
+                "Other Notable Crystals": [
+                     { 
+                        name: "Malachite", 
+                        meaning: "A powerful stone of transformation that amplifies energies of all kinds. It encourages risk-taking and change, breaking unwanted ties and outworn patterns.",
+                        imageUrls: ["https://images.pexels.com/photos/1011329/pexels-photo-1011329.jpeg?auto=compress&cs=tinysrgb&w=800"], 
+                        chakra: "Heart, Throat", zodiac: "Libra, Scorpio, Capricorn",
+                        history: "Used as a pigment for green paint for thousands of years. In ancient Egypt, the lining of the pharaoh's headdress was said to be malachite, believed to raise the ruler's vibrations to a higher level.",
+                        countries: ["Russia (Urals)", "Congo", "Zambia", "Australia", "USA"],
+                        emotions: ["Transformation", "Protection (absorbs negativity)", "Emotional healing", "Encouraging change", "Inhibition release"],
+                        element: "Earth",
+                        sacredNumber: 9
+                    },
+                    { 
+                        name: "Lapis Lazuli", 
+                        meaning: "A stone of wisdom, intuition, and truth that quickly releases stress, bringing deep peace. It stimulates objectivity, clarity and encourages creativity.",
+                        imageUrls: ["https://images.pexels.com/photos/12431633/pexels-photo-12431633.jpeg?auto=compress&cs=tinysrgb&w=800"], 
+                        chakra: "Throat, Third Eye", zodiac: "Taurus, Virgo, Libra, Sagittarius",
+                        history: "One of the most sought-after stones in ancient history. It was used extensively in ancient Egypt for amulets and ornaments, and famously ground into powder for Cleopatra's eyeshadow.",
+                        countries: ["Afghanistan", "Chile", "Siberia", "USA", "Pakistan"],
+                        emotions: ["Wisdom", "Truth", "Self-expression", "Stress relief", "Clarity"],
+                        element: "Air",
+                        sacredNumber: 3
+                    },
+                     { 
+                        name: "Black Tourmaline", 
+                        meaning: "A premier stone of protection, it repels and blocks negative energies. It also aids in the removal of negative energies within a person or a space.",
+                        imageUrls: ["https://images.pexels.com/photos/1579240/pexels-photo-1579240.jpeg?auto=compress&cs=tinysrgb&w=800", "https://images.pexels.com/photos/1239859/pexels-photo-1239859.jpeg?auto=compress&cs=tinysrgb&w=800"], 
+                        chakra: "Root", zodiac: "Capricorn",
+                        history: "Ancient magicians relied upon Black Tourmaline to protect them from earth demons as they cast their spells. It was traditionally used to point out a cause of trouble or a guilty party.",
+                        countries: ["Brazil", "Pakistan", "Africa", "USA", "Sri Lanka"],
+                        emotions: ["Protection", "Grounding", "Dispelling negativity", "Reducing anxiety", "Security"],
+                        element: "Earth",
+                        sacredNumber: 3
+                    },
+                    // ... many more crystals could be added here
                 ]
             };
 
+            const mainPage = document.getElementById('main-page');
+            const detailPage = document.getElementById('crystal-detail-page');
+            const backBtn = document.getElementById('back-to-guide-btn');
+            
             const grid = document.getElementById('crystal-grid');
             const searchBox = document.getElementById('search-box');
             
-            const modal = document.getElementById('crystal-detail-modal');
-            const modalBackdrop = document.getElementById('modal-backdrop');
-            const modalContent = document.getElementById('modal-content');
-            const modalGradientBg = document.getElementById('modal-gradient-bg');
-            const closeModalBtn = document.getElementById('close-modal-btn');
-            
-            const modalImg = document.getElementById('modal-img');
-            const modalName = document.getElementById('modal-name');
-            const modalMeaning = document.getElementById('modal-meaning');
-            const modalChakra = document.getElementById('modal-chakra');
-            const modalZodiac = document.getElementById('modal-zodiac');
+            const detailNameHeader = document.getElementById('detail-name-header');
+            const detailImg = document.getElementById('detail-img');
             const thumbnailGallery = document.getElementById('thumbnail-gallery');
+            const detailMeaning = document.getElementById('detail-meaning');
+            const detailHistory = document.getElementById('detail-history');
+            const detailEmotions = document.getElementById('detail-emotions');
+            const detailChakra = document.getElementById('detail-chakra');
+            const detailZodiac = document.getElementById('detail-zodiac');
+            const detailElement = document.getElementById('detail-element');
+            const detailNumber = document.getElementById('detail-number');
+            const detailCountries = document.getElementById('detail-countries');
+
+            function showMainPage() {
+                detailPage.classList.add('hidden');
+                mainPage.classList.remove('hidden');
+            }
+
+            function showDetailPage(crystal) {
+                mainPage.classList.add('hidden');
+                detailPage.classList.remove('hidden');
+
+                // Populate detail page
+                detailNameHeader.textContent = crystal.name;
+                detailImg.src = crystal.imageUrls[0];
+                detailMeaning.textContent = crystal.meaning;
+                detailHistory.textContent = crystal.history;
+                
+                detailEmotions.innerHTML = '';
+                crystal.emotions.forEach(emotion => {
+                    const li = document.createElement('li');
+                    li.textContent = emotion;
+                    detailEmotions.appendChild(li);
+                });
+
+                detailChakra.textContent = crystal.chakra;
+                detailZodiac.textContent = crystal.zodiac;
+                detailElement.textContent = crystal.element;
+                detailNumber.textContent = crystal.sacredNumber;
+                detailCountries.textContent = crystal.countries.join(', ');
+
+                // Populate thumbnail gallery
+                thumbnailGallery.innerHTML = '';
+                crystal.imageUrls.forEach((url, index) => {
+                    const thumb = document.createElement('img');
+                    thumb.src = url;
+                    thumb.className = 'thumbnail w-20 h-20 object-cover rounded-lg cursor-pointer border-4 border-transparent hover:border-gray-300 transition-all';
+                    if (index === 0) {
+                        thumb.classList.add('active-thumbnail');
+                    }
+                    thumb.addEventListener('click', () => {
+                        detailImg.src = url;
+                        document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active-thumbnail'));
+                        thumb.classList.add('active-thumbnail');
+                    });
+                    thumbnailGallery.appendChild(thumb);
+                });
+
+                window.scrollTo(0, 0);
+            }
 
             function renderGrid(filter = '') {
                 grid.innerHTML = '';
@@ -175,7 +362,7 @@
                     if (filteredCrystals.length > 0) {
                         hasResults = true;
                         const section = document.createElement('section');
-                        section.className = `accordion-section rounded-2xl bg-white/50 p-6 shadow-lg accordion-open`;
+                        section.className = `accordion-section rounded-2xl bg-white/60 p-6 shadow-lg accordion-open`;
 
                         const headerButton = document.createElement('button');
                         headerButton.className = 'w-full flex justify-between items-center text-left text-3xl text-gray-800 cursor-pointer focus:outline-none';
@@ -196,12 +383,12 @@
                             card.innerHTML = `
                                 <div class="relative">
                                     <img src="${crystal.imageUrls[0]}" alt="${crystal.name}" class="w-full h-56 object-cover" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/400x400/cccccc/333333?text=Image+Error';">
-                                    <div class="absolute bottom-0 left-0 w-full p-4 bg-black bg-opacity-40 backdrop-blur-sm">
+                                    <div class="absolute bottom-0 left-0 w-full p-4 bg-black bg-opacity-50 backdrop-blur-sm">
                                         <h3 class="text-2xl text-white">${crystal.name}</h3>
                                     </div>
                                 </div>
                             `;
-                            card.addEventListener('click', () => showModal(crystal));
+                            card.addEventListener('click', () => showDetailPage(crystal));
                             cardGrid.appendChild(card);
                         });
                         
@@ -220,62 +407,9 @@
                     grid.innerHTML = `<p class="text-center text-gray-600 text-xl col-span-full">No crystals found matching your search.</p>`;
                 }
             }
-
-            function showModal(crystal) {
-                // Set text details
-                modalName.textContent = crystal.name;
-                modalMeaning.textContent = crystal.meaning;
-                modalChakra.textContent = crystal.chakra;
-                modalZodiac.textContent = crystal.zodiac;
-                modalGradientBg.style.background = `linear-gradient(to bottom right, ${crystal.colorHex}, #1f2937)`;
-
-                // Set main image
-                modalImg.src = crystal.imageUrls[0];
-
-                // Populate thumbnail gallery
-                thumbnailGallery.innerHTML = ''; // Clear previous thumbnails
-                crystal.imageUrls.forEach((url, index) => {
-                    const thumb = document.createElement('img');
-                    thumb.src = url;
-                    thumb.className = 'thumbnail w-20 h-20 object-cover rounded-lg cursor-pointer border-4 border-transparent hover:border-gray-300 transition-all';
-                    if (index === 0) {
-                        thumb.classList.add('active-thumbnail');
-                    }
-                    thumb.addEventListener('click', () => {
-                        modalImg.src = url;
-                        // Update active state
-                        document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active-thumbnail'));
-                        thumb.classList.add('active-thumbnail');
-                    });
-                    thumbnailGallery.appendChild(thumb);
-                });
-
-
-                // Show modal with animation
-                modal.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-                setTimeout(() => {
-                    modalBackdrop.classList.remove('opacity-0');
-                    modalBackdrop.classList.add('opacity-100');
-                    modalContent.classList.remove('scale-95');
-                    modalContent.classList.add('scale-100');
-                }, 10);
-            }
-
-            function hideModal() {
-                modalBackdrop.classList.remove('opacity-100');
-                modalBackdrop.classList.add('opacity-0');
-                modalContent.classList.remove('scale-100');
-                modalContent.classList.add('scale-95');
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                    document.body.style.overflow = '';
-                }, 300); 
-            }
             
             // --- EVENT LISTENERS ---
-            closeModalBtn.addEventListener('click', hideModal);
-            modalBackdrop.addEventListener('click', hideModal);
+            backBtn.addEventListener('click', showMainPage);
             searchBox.addEventListener('input', (e) => {
                 renderGrid(e.target.value);
             });

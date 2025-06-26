@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crystal Guide</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f0e9; /* Earthy tone background */
+            color: #333;
+        }
+        /* Style for the modal backdrop */
+        #modal-backdrop {
+            transition: opacity 0.3s ease-in-out;
+        }
+        /* Style for the modal content */
+        #modal-content {
+            transition: transform 0.3s ease-in-out;
+        }
+        /* Custom scrollbar for a better look */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.6);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Main Container -->
+    <div id="app" class="container mx-auto px-4 py-8 md:py-12">
+
+        <!-- Header -->
+        <header class="text-center md:text-left mb-12">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800">Crystal Guide</h1>
+            <p class="text-lg text-gray-500 mt-2">Discover their meanings and vibrant energies</p>
+        </header>
+
+        <!-- Crystal Grid -->
+        <main id="crystal-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 md:gap-8">
+            <!-- Crystal cards and category headers will be injected here by JavaScript -->
+        </main>
+
+    </div>
+
+    <!-- Detail Modal -->
+    <div id="crystal-detail-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <!-- Backdrop -->
+        <div id="modal-backdrop" class="absolute inset-0 bg-black bg-opacity-50 opacity-0"></div>
+
+        <!-- Modal Content -->
+        <div id="modal-content" class="relative z-10 w-full max-w-2xl max-h-[90vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col transform scale-95">
+            <!-- Dynamic Gradient Background -->
+            <div id="modal-gradient-bg" class="absolute inset-0"></div>
+             <!-- Close Button -->
+            <button id="close-modal-btn" class="absolute top-4 right-4 z-20 text-white bg-black bg-opacity-20 rounded-full p-2 hover:bg-opacity-40 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <div class="relative p-6 md:p-8 overflow-y-auto custom-scrollbar">
+                <div class="flex flex-col md:flex-row gap-8">
+                    <!-- Image -->
+                    <img id="modal-img" src="" alt="Crystal" class="w-full md:w-1/2 h-auto object-cover rounded-2xl shadow-lg border-4 border-white/20">
+                    <!-- Text Content -->
+                    <div class="text-white w-full md:w-1/2">
+                        <h2 id="modal-name" class="text-4xl font-bold mb-4" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.4);"></h2>
+                        <h3 class="text-xl font-semibold mb-2 opacity-90">Meaning</h3>
+                        <p id="modal-meaning" class="text-base leading-relaxed opacity-90"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DATA ---
+            // A comprehensive, categorized list of crystals.
+            const crystalData = {
+                "The Quartz Family": [
+                    { name: "Clear Quartz", meaning: "Known as the 'master healer,' it amplifies energy, thought, and the effects of other crystals. It absorbs, stores, releases, and regulates energy, promoting clarity and focus.", imageName: "clear-quartz", colorHex: "#eaf2f8" },
+                    { name: "Amethyst", meaning: "A protective stone that relieves stress, balances mood swings, and dispels negativity. It enhances spiritual awareness and intuition.", imageName: "amethyst", colorHex: "#9b59b6" },
+                    { name: "Rose Quartz", meaning: "The stone of universal love. It fosters unconditional love, trust, and harmony in relationships, while promoting self-love and deep inner healing.", imageName: "rose-quartz", colorHex: "#f7cac9" },
+                    { name: "Citrine", meaning: "Attracts wealth, prosperity, and success. It imparts joy, wonder, and enthusiasm, raising self-esteem and stimulating creativity.", imageName: "citrine", colorHex: "#f1c40f" },
+                    { name: "Smoky Quartz", meaning: "A grounding and protective stone that neutralizes negative vibrations. It aids in detoxification, disperses fear, and lifts depression.", imageName: "smoky-quartz", colorHex: "#5d4954" },
+                    { name: "Aventurine", meaning: "A stone of prosperity and luck. It reinforces leadership qualities and decisiveness while promoting compassion and perseverance.", imageName: "aventurine", colorHex: "#27ae60" },
+                ],
+                "Chalcedony Varieties": [
+                    { name: "Agate", meaning: "A grounding stone that brings emotional, physical, and intellectual balance. It centers and stabilizes physical energy.", imageName: "agate", colorHex: "#839192" },
+                    { name: "Carnelian", meaning: "A stabilizing stone that restores vitality and motivation. It stimulates creativity, courage, and positive life choices.", imageName: "carnelian", colorHex: "#e74c3c" },
+                    { name: "Onyx", meaning: "A stone of strength, giving support in difficult circumstances. It centers energy, promotes vigor, and aids in wise decision-making.", imageName: "onyx", colorHex: "#34495e" },
+                    { name: "Jasper", meaning: "Known as the 'supreme nurturer,' it sustains and supports through times of stress. It brings tranquility and wholeness.", imageName: "jasper", colorHex: "#c0392b" },
+                    { name: "Bloodstone", meaning: "An excellent blood cleanser and a powerful healing stone. It heightens intuition and increases creativity while being grounding and protective.", imageName: "bloodstone", colorHex: "#2c3e50" },
+                    { name: "Chrysoprase", meaning: "Promotes joy, optimism, and love. It helps mend broken hearts and reduces anxiety, fostering forgiveness and compassion.", imageName: "chrysoprase", colorHex: "#a3e4d7" },
+                ],
+                "The Feldspar Group": [
+                    { name: "Moonstone", meaning: "A stone of new beginnings, inner growth, and strength. It soothes emotional instability and stress, providing calmness.", imageName: "moonstone", colorHex: "#aed6f1" },
+                    { name: "Labradorite", meaning: "A stone of transformation and a useful companion through change. It balances and protects the aura, raises consciousness, and grounds spiritual energies.", imageName: "labradorite", colorHex: "#566573" },
+                    { name: "Sunstone", meaning: "A stone of leadership, bringing personal power, freedom, and expanded consciousness. It instills good nature and heightens intuition.", imageName: "sunstone", colorHex: "#f39c12" },
+                    { name: "Amazonite", meaning: "Known as the 'stone of courage,' it soothes emotional trauma, alleviating worry and fear. It dispels negative energy and aggravation.", imageName: "amazonite", colorHex: "#1abc9c" },
+                ],
+                 "Oxides & Hydroxides": [
+                    { name: "Hematite", meaning: "A very protective stone that helps to absorb negative energy and calms in times of stress or worry. It is a great detoxifying stone.", imageName: "hematite", colorHex: "#707b7c" },
+                    { name: "Ruby (Corundum)", meaning: "Energizes and balances the heart. It encourages a passion for life but never in a self-destructive way. It improves motivation and setting of realistic goals.", imageName: "ruby", colorHex: "#e74c3c" },
+                    { name: "Sapphire (Corundum)", meaning: "Known as the 'wisdom stone,' each color of Sapphire brings its own particular wisdom. It focuses and calms the mind, releasing unwanted thoughts and mental tension.", imageName: "sapphire", colorHex: "#3498db" },
+                ],
+                "Carbonates & Others": [
+                     { name: "Malachite", meaning: "A powerful stone of transformation that encourages risk-taking and change. It breaks unwanted ties and outworn patterns.", imageName: "malachite", colorHex: "#16a085" },
+                     { name: "Selenite", meaning: "Provides for clarity of the mind, opening the crown and higher crown chakras. It is a calming stone that instills deep peace.", imageName: "selenite", colorHex: "#fdfefe" },
+                     { name: "Lapis Lazuli", meaning: "A stone of wisdom, intuition, and truth. It stimulates the desire for knowledge and understanding, and aids the process of learning.", imageName: "lapis-lazuli", colorHex: "#2980b9" },
+                     { name: "Turquoise", meaning: "A purification stone. It dispels negative energy and can be worn to protect against outside influences or pollutants in the atmosphere.", imageName: "turquoise", colorHex: "#1abc9c" },
+                     { name: "Garnet", meaning: "A powerfully energizing and regenerating stone. It revitalizes, purifies, and balances energy, bringing serenity or passion as appropriate.", imageName: "garnet", colorHex: "#c0392b" },
+                ]
+            };
+
+            // --- ELEMENTS ---
+            const grid = document.getElementById('crystal-grid');
+            const modal = document.getElementById('crystal-detail-modal');
+            const modalBackdrop = document.getElementById('modal-backdrop');
+            const modalContent = document.getElementById('modal-content');
+            const modalGradientBg = document.getElementById('modal-gradient-bg');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            
+            const modalImg = document.getElementById('modal-img');
+            const modalName = document.getElementById('modal-name');
+            const modalMeaning = document.getElementById('modal-meaning');
+            
+            // --- FUNCTIONS ---
+
+            /**
+             * Renders all crystal cards into the grid, organized by category.
+             */
+            function renderGrid() {
+                grid.innerHTML = ''; // Clear existing grid items
+                
+                for (const category in crystalData) {
+                    // 1. Create and append the category header
+                    const header = document.createElement('h2');
+                    header.className = 'col-span-full text-2xl md:text-3xl font-bold text-gray-700 mt-8 mb-4 border-b-2 border-gray-400/50 pb-2';
+                    header.textContent = category;
+                    grid.appendChild(header);
+
+                    // 2. Render all crystals for the current category
+                    crystalData[category].forEach(crystal => {
+                        const imageUrl = `https://placehold.co/400x400/${crystal.colorHex.substring(1)}/333333?text=${crystal.name.replace(/\s/g, '+')}`;
+                        const card = document.createElement('div');
+                        card.className = 'group cursor-pointer transform hover:-translate-y-2 transition-transform duration-300';
+                        card.innerHTML = `
+                            <div class="bg-white rounded-2xl shadow-lg overflow-hidden h-full flex flex-col">
+                                <img src="${imageUrl}" alt="${crystal.name}" class="w-full h-40 md:h-48 object-cover group-hover:opacity-90 transition-opacity" onerror="this.onerror=null;this.src='https://placehold.co/400x400/cccccc/333333?text=Image+Not+Found';">
+                                <div class="p-4 flex-grow">
+                                    <h3 class="text-lg font-bold text-gray-800">${crystal.name}</h3>
+                                </div>
+                            </div>
+                        `;
+                        card.addEventListener('click', () => showModal(crystal));
+                        grid.appendChild(card);
+                    });
+                }
+            }
+
+            /**
+             * Displays and populates the modal with a specific crystal's data.
+             * @param {object} crystal - The crystal object to display.
+             */
+            function showModal(crystal) {
+                // Populate modal with data
+                const imageUrl = `https://placehold.co/600x600/${crystal.colorHex.substring(1)}/ffffff?text=${crystal.name.replace(/\s/g, '+')}`;
+                modalImg.src = imageUrl;
+                modalImg.alt = crystal.name;
+                modalName.textContent = crystal.name;
+                modalMeaning.textContent = crystal.meaning;
+                
+                // Set the dynamic gradient background
+                modalGradientBg.style.background = `linear-gradient(to bottom right, ${crystal.colorHex}, #1f2937)`;
+
+                // Show the modal with animation
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                
+                setTimeout(() => {
+                    modalBackdrop.classList.remove('opacity-0');
+                    modalBackdrop.classList.add('opacity-100');
+                    modalContent.classList.remove('scale-95');
+                    modalContent.classList.add('scale-100');
+                }, 10);
+            }
+
+            /**
+             * Hides the modal with animation.
+             */
+            function hideModal() {
+                modalBackdrop.classList.remove('opacity-100');
+                modalBackdrop.classList.add('opacity-0');
+                modalContent.classList.remove('scale-100');
+                modalContent.classList.add('scale-95');
+
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = ''; // Restore scrolling
+                }, 300); 
+            }
+
+            // --- EVENT LISTENERS ---
+            closeModalBtn.addEventListener('click', hideModal);
+            modalBackdrop.addEventListener('click', hideModal);
+
+            // --- INITIALIZATION ---
+            renderGrid();
+        });
+    </script>
+
+</body>
+</html>
